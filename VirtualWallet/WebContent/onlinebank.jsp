@@ -66,7 +66,7 @@
 <h3>Deposit or Withdraw</h3>
 
 <form method="POST" action="Bank">
-Account Number:<br>
+Account ID:<br>
  <input type="text" name="accountNum"/><br>
 Amount:<br>
  <input type="text" name="amount"/><br>
@@ -78,9 +78,9 @@ Amount:<br>
 <div>
 <h3>Transfer</h3>
 <form method="POST" action="Bank">
- Transfer from (input account number):<br>
+ Transfer from (input account ID):<br>
  <input type="text" name="accountFrom"/><br>
- Transfer to (input account number): <br>
+ Transfer to (input account ID): <br>
  <input type="text" name="accountTo"/> <br>
  Amount: <br>
  <input type="text" name="amount"/> <br>

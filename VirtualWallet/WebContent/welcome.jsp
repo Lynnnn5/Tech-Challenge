@@ -16,12 +16,22 @@
  
 <form method="POST" action="Bank">
 Input user name, we will create a virtual wallet for you!<br><br>
+ <div>
+<%
+	String e= (String)request.getAttribute("registerError");
+    if(e!=null&&e.length()!=0){
+%>
+<p style="color:red"><%=e%></p>
+<%
+    }
+%>
+</div>
  User name:  <input type="text" name="username"/><br><br>
  <input type="hidden" name="ActionType" value = "createWallet"/> 
  <input type="submit" value="Create Virtual Wallet"/><br><br>
  </form>
  
- Already have a wallet? Input user name to login!<br>
+ Already have a wallet? Input user name to login!<br><br>
  <div>
 <%
 	String error= (String)request.getAttribute("accountError");

@@ -44,10 +44,7 @@ public class InMemoryStorage {
 		wallets.put(wallet.getUserName(),wallet);
 	}
 	
-	public static Wallet getWallet(String userName) throws Exception{
-		if(wallets.get(userName)==null) {
-			throw new Exception("No such user!");
-		}
+	public static Wallet getWallet(String userName){
 		return wallets.get(userName);
 	}
 	

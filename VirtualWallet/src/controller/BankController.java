@@ -42,7 +42,15 @@ public class BankController extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		HttpSession session = request.getSession();
+		Wallet currentWallet = (Wallet)session.getAttribute("wallet");
+		List<String> accountsNum = null;
+		if(currentWallet!=null) {
+			accountsNum = currentWallet.getAccounts();
+		}	
 		String actionType = request.getParameter("ActionType");
+		
+		
 		switch(actionType){
 		case "login":
 			String user = request.getParameter("loginname");
@@ -53,13 +61,22 @@ public class BankController extends HttpServlet {
 				request.setAttribute("accountError", e1.getMessage());
 				RequestDispatcher d = request.getRequestDispatcher("welcome.jsp");
 		        d.forward(request, response);
+		        break;
 			}
-			HttpSession session = request.getSession();
+			
 			session.setAttribute("wallet", wallet);
 			break;
 		case "createWallet":
 			String userName = request.getParameter("username");
-			Wallet w = Bank.createWallet(userName);
+			Wallet w = null;
+			try {
+				w = Bank.createWallet(userName);
+			} catch (Exception e) {
+				request.setAttribute("registerError", e.getMessage());
+				RequestDispatcher d = request.getRequestDispatcher("welcome.jsp");
+		        d.forward(request, response);
+		        break;
+			}
 			session = request.getSession();
 			session.setAttribute("wallet", w);
 			break;
@@ -67,6 +84,10 @@ public class BankController extends HttpServlet {
 		case "Withdraw":
 			double amount = Double.parseDouble(request.getParameter("amount"));
 			String num = request.getParameter("accountNum");
+			if(!accountsNum.contains(num)) {
+				request.setAttribute("error", "Cannot access account that do not belong to you");
+				break;
+			}
 			try {
 				Bank.withdraw(amount,num);
 			} catch (Exception e) {
@@ -77,6 +98,10 @@ public class BankController extends HttpServlet {
 		case "Deposit":
 			amount = Double.parseDouble(request.getParameter("amount"));
 			num = request.getParameter("accountNum");
+			if(!accountsNum.contains(num)) {
+				request.setAttribute("error", "Cannot access account that do not belong to you");
+				break;
+			}
 			try {
 				Bank.deposit(amount,num);
 			} catch (Exception e) {
@@ -88,6 +113,10 @@ public class BankController extends HttpServlet {
 			String accountFrom = request.getParameter("accountFrom");
 			String accountTo = request.getParameter("accountTo");
 			amount = Double.parseDouble(request.getParameter("amount"));
+			if(!accountsNum.contains(accountFrom)||!accountsNum.contains(accountTo)) {
+				request.setAttribute("error", "Cannot access account that do not belong to you");
+				break;
+			}
 			try {
 				Bank.transfer(amount,accountFrom,accountTo);
 			} catch (Exception e) {

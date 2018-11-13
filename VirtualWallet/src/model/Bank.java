@@ -11,8 +11,12 @@ public class Bank {
 	 * Create a new wallet for a user
 	 * @param userName
 	 * @return a wallet with two default accounts
+	 * @throws Exception: if a user name already exists
 	 */
-	public static Wallet createWallet(String userName) {
+	public static Wallet createWallet(String userName) throws Exception {
+		if(InMemoryStorage.getWallet(userName)!=null) {
+			throw new Exception("User name already exists");
+		}
 		Wallet w = new Wallet(userName);
 		InMemoryStorage.addWallet(w);
 		return w;
@@ -32,7 +36,7 @@ public class Bank {
 	 * @param amount 
 	 * @param from
 	 * @return a transaction
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static Transaction withdraw(double amount, String from) throws Exception {
 		Transaction t= new Withdraw(amount,from,null); 
@@ -87,6 +91,9 @@ public class Bank {
 	 * @throws Exception "No such user"
 	 */
 	public static Wallet getWallet(String userName) throws Exception {
+		if(InMemoryStorage.getWallet(userName)==null) {
+			throw new Exception("No such user!");
+		}
 		return InMemoryStorage.getWallet(userName);
 	}
 
